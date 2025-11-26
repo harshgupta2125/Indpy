@@ -1,5 +1,5 @@
 # Look! We are importing it just like a standard library
-import indpy 
+import indpy
 
 print("--- TESTING INDPY LIBRARY ---")
 
@@ -13,7 +13,7 @@ else:
 
 # 2. Test PAN Card
 # ----------------
-my_pan = "ABCDE1234F"
+my_pan = "CVZPC7403E"
 if indpy.is_pan(my_pan):
     print(f"✅ PAN '{my_pan}' is VALID")
 else:
@@ -37,3 +37,16 @@ if indpy.is_gstin(fake_gst) == False:
     print(f"✅ Fake GSTIN '{fake_gst}' was caught correctly!")
 else:
     print(f"❌ Fake GSTIN bypassed the check (Logic Error)")
+
+# 4. Test Other Validators
+# -------------------------
+# Validation
+if indpy.is_ifsc("SBIN0004321"):
+    print("Bank Valid")
+
+if indpy.is_vehicle("UP16Z5555"):
+    print("Car Valid")
+
+# Generation (The cool part)
+dummy_pan = indpy.Generate.pan()
+print(f"Generated Test PAN: {dummy_pan}")

@@ -1,60 +1,93 @@
+"""
+Core validation logic for Indian Identity and Financial documents.
+Author: Harsh Gupta
+License: MIT
+"""
+
 import re
+
+# Pre-compiling regex patterns for performance efficiency
+# Source: UIDAI and Income Tax Dept standards
+PATTERNS = {
+    "pan": re.compile(r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"),
+    "mobile": re.compile(r"^[6-9]\d{9}$"),
+    "aadhaar_simple": re.compile(r"^[2-9]\d{11}$"),
+    "ifsc": re.compile(r"^[A-Z]{4}0[A-Z0-9]{6}$"),
+    "vehicle": re.compile(r"^[A-Z]{2}[0-9]{1,2}[A-Z]{0,3}[0-9]{4}$"),
+    "upi": re.compile(r"^[\w\.\-]+@[\w\.\-]+$")
+}
+
+def is_pan(pan_number: str) -> bool:
+    """
+    Validates Permanent Account Number (PAN).
+    Note: Currently implements Regex check. Checksum implementation pending v1.1.
+    """
+    if not isinstance(pan_number, str):
+        return False
+    return bool(PATTERNS["pan"].match(pan_number.upper()))
 
 def is_mobile(number: str) -> bool:
     """
-    Validates Indian Mobile Number.
-    Accepts: '9876543210', '+919876543210', '+91 9876543210'
+    Validates 10-digit Indian Mobile Numbers.
+    Ignores +91 prefix if present.
     """
-    # Clean the number: Remove spaces, dashes, and +91
-    clean_num = str(number).replace(" ", "").replace("-", "").replace("+91", "")
+    if not number:
+        return False
     
-    # Check if it is exactly 10 digits and starts with 6, 7, 8, or 9
-    pattern = r"^[6-9]\d{9}$"
-    return bool(re.match(pattern, clean_num))
+    # Sanitize input: remove spaces, dashes, +91
+    clean_num = str(number).replace(" ", "").replace("-", "").replace("+91", "")
+    return bool(PATTERNS["mobile"].match(clean_num))
 
-def is_pan(pan: str) -> bool:
+def is_ifsc(code: str) -> bool:
     """
-    Validates Indian PAN Card format.
-    Format: 5 Letters, 4 Digits, 1 Letter (e.g., ABCDE1234F)
+    Validates Indian Financial System Code (IFSC).
+    Structure: 4 chars (Bank) + 0 + 6 chars (Branch).
     """
-    pattern = r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"
-    return bool(re.match(pattern, pan.upper()))
+    return bool(PATTERNS["ifsc"].match(str(code).upper()))
+
+def is_vehicle(number: str) -> bool:
+    """
+    Validates RC (Registration Certificate) Number.
+    Example: DL01CA1234
+    """
+    clean_num = str(number).replace(" ", "").replace("-", "").upper()
+    return bool(PATTERNS["vehicle"].match(clean_num))
+
+def is_upi(upi_id: str) -> bool:
+    """Validates UPI ID format (e.g., user@bank)."""
+    return bool(PATTERNS["upi"].match(str(upi_id)))
 
 def is_gstin(gstin: str) -> bool:
     """
-    Validates GSTIN using Checksum Algorithm.
-    Format: 22AAAAA0000A1Z5
+    Validates Goods and Services Tax ID (GSTIN) with Checksum.
+    Implements Modulo-36 hashing algorithm.
     """
-    gstin = gstin.upper().strip()
+    gstin = str(gstin).upper().strip()
     
-    # Step 1: Basic Regex Check (15 chars total)
-    # 2 digits + 5 letters + 4 digits + 1 letter + 1 digit + 'Z' + 1 char
-    if not re.match(r"^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$", gstin):
+    # 1. Format check
+    regex_check = re.match(r"^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$", gstin)
+    if not regex_check:
         return False
 
-    # Step 2: The Checksum Math (Modulo 36)
-    # This ensures the number is mathematically valid
+    # 2. Checksum Logic (Modulo 36)
     chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    
     total = 0
-    factor = 1 # We multiply by 1, then 2, then 1...
+    factor = 1 
 
-    # Loop through first 14 characters
-    for i in range(14):
-        code_point = chars.find(gstin[i]) # Get value (A=10, B=11...)
+    try:
+        for i in range(14):
+            code_point = chars.index(gstin[i])
+            product = factor * code_point
+            
+            # Sum the quotient and remainder
+            digit = (product // 36) + (product % 36)
+            total += digit
+            
+            # Toggle factor between 1 and 2
+            factor = 2 if factor == 1 else 1
+            
+        check_code = (36 - (total % 36)) % 36
+        return gstin[14] == chars[check_code]
         
-        product = factor * code_point
-        
-        # Add quotient and remainder to total
-        digit = (product // 36) + (product % 36)
-        total += digit
-        
-        # Toggle factor (if 1 make 2, if 2 make 1)
-        factor = 2 if factor == 1 else 1
-        
-    # Calculate what the last digit SHOULD be
-    check_val = (36 - (total % 36)) % 36
-    calculated_char = chars[check_val]
-    
-    # Compare with actual last digit
-    return gstin[14] == calculated_char
+    except ValueError:
+        return False

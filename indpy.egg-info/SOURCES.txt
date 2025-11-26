@@ -1,9 +1,10 @@
+LICENSE
 README.md
 setup.py
 indpy/__init__.py
 indpy/cli.py
+indpy/generators.py
 indpy/validators.py
-indpy.egg-info/LICENSE
 indpy.egg-info/PKG-INFO
 indpy.egg-info/SOURCES.txt
 indpy.egg-info/dependency_links.txt
