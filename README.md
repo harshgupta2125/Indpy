@@ -9,14 +9,14 @@ indpy is a Python library for validating and generating Indian government docume
 ## 🚀 Features
 
 ### ✅ Validation
-- PAN Card: structure validation.
-- GSTIN: structure + Modulo-36 checksum verification.
+- PAN Card: Structure validation.
+- GSTIN: Structure + Modulo-36 checksum verification.
 - Mobile Number: Indian 10-digit format (starts with 6–9).
-- IFSC Code: bank branch code validation.
-- Vehicle (RC) Number: standard RTO formats (e.g., DL01CA1234).
-- UPI ID: standard handle validation.
+- IFSC Code: Bank branch code validation.
+- Vehicle (RC) Number: Standard RTO formats (e.g., DL01CA1234).
+- UPI ID: Standard handle validation.
 
-### 🎲 Data generation (mock data)
+### 🎲 Data Generation (Mock Data)
 - Generate valid PAN numbers for testing.
 - Generate valid mobile numbers.
 - Generate random vehicle registration numbers.
@@ -28,12 +28,15 @@ indpy is a Python library for validating and generating Indian government docume
 Install from PyPI:
 
 ```bash
-pip install indpy
+pip install indpy-core
 ```
+
+Note: The package name on PyPI is `indpy-core`, but you import it in Python as `indpy`.
 
 Install for local development:
 
 ```bash
+# Clone the repository (replace YOUR_USERNAME with your GitHub username if needed)
 git clone https://github.com/YOUR_USERNAME/indpy.git
 cd indpy
 pip install -e .
@@ -41,7 +44,7 @@ pip install -e .
 
 ## 💻 Usage
 
-### 1) Python — Validation
+1) Python — Validation
 
 ```python
 from indpy import is_pan, is_gstin, is_vehicle
@@ -49,6 +52,8 @@ from indpy import is_pan, is_gstin, is_vehicle
 # Validate PAN
 if is_pan("ABCDE1234F"):
     print("Valid PAN")
+else:
+    print("Invalid PAN")
 
 # Validate GSTIN (includes checksum)
 if is_gstin("29ABCDE1234F1Z5"):
@@ -60,7 +65,7 @@ else:
 print(is_vehicle("UP16Z5555"))  # True or False
 ```
 
-### 2) Python — Generating mock data
+2) Python — Generating Mock Data
 
 ```python
 from indpy import Generate
@@ -75,7 +80,7 @@ print(Generate.mobile())  # e.g. "9876123450"
 print(Generate.vehicle()) # e.g. "DL04CA9921"
 ```
 
-### 3) Command line interface
+3) Command Line Interface
 
 Check version:
 
@@ -100,25 +105,31 @@ indpy gen vehicle
 # Output: DL04CA9921
 ```
 
-## 🛠️ Supported documents
+## 🛠️ Supported Documents
 
 | Document | Regex / Logic (approx.) | Checksum implemented? |
-|---------:|-------------------------|:---------------------:|
-| PAN | `[A-Z]{5}[0-9]{4}[A-Z]{1}` | ❌ (structure only; checksum planned v1.1) |
-| GSTIN | `\d{2}[A-Z]{5}[0-9A-Z]{9}` (Modulo-36 checksum) | ✅ |
-| Mobile | `[6-9]\d{9}` | N/A |
-| IFSC | `[A-Z]{4}0[A-Z0-9]{6}` | N/A |
-| Vehicle (RC) | `[A-Z]{2}\d{1,2}[A-Z]{1,2}\d{1,4}` (varies by state) | N/A |
+|---------:|:------------------------|:----------------------:|
+| PAN | `^[A-Z]{5}[0-9]{4}[A-Z]$` | No (Structure only; checksum planned v1.1) |
+| GSTIN | `^\d{2}[A-Z]{5}[0-9A-Z]{9}$` | Yes (Modulo-36 checksum) |
+| Mobile | `^[6-9]\d{9}$` | N/A |
+| IFSC | `^[A-Z]{4}0[A-Z0-9]{6}$` | N/A |
+| Vehicle | `^[A-Z]{2}\d{1,2}[A-Z]{1,2}\d{1,4}$` | N/A |
 
 > Note: Regex shown are illustrative and may be refined in code. GSTIN validation includes official Modulo-36 checksum verification.
 
 ## 🤝 Contributing
 
-Contributions welcome. Typical workflow:
+Contributions are welcome! Typical workflow:
 
 1. Fork the repository.
-2. Create a feature branch: git checkout -b feature/NewValidation
-3. Commit your changes: git commit -m "Add Aadhaar support"
+2. Create a feature branch:
+   ```bash
+   git checkout -b feature/NewValidation
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m "Add Aadhaar support"
+   ```
 4. Push and open a pull request.
 
 Please follow the existing code style and include tests for new validations.
@@ -126,3 +137,15 @@ Please follow the existing code style and include tests for new validations.
 ## 📄 License
 
 Distributed under the MIT License. See LICENSE for details.
+
+---
+
+### ⚠️ Don't forget
+1. Replace `YOUR_USERNAME` in the `git clone` link with your actual GitHub username.
+2. Push this change to GitHub so the front page updates immediately:
+
+```bash
+git add README.md
+git commit -m "Update README formatting"
+git push origin main
+```
