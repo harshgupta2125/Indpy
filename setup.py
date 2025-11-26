@@ -1,6 +1,5 @@
 from setuptools import setup, find_packages
 
-# Read README for long description
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
@@ -8,13 +7,13 @@ setup(
     name="indpy-core",
     version="0.1.0",
     author="Harsh Gupta",
-    author_email="harsh@example.com",  # Update this
+    author_email="harsh2125gupta@gmail.com",
     description="A comprehensive library for Indian Identity and Financial data validation.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/YOUR_USERNAME/indpy",
+    url="https://github.com/harshgupta2125/Indpy",
     project_urls={
-        "Bug Tracker": "https://github.com/YOUR_USERNAME/indpy/issues",
+        "Bug Tracker": "https://github.com/harshgupta2125/Indpy/issues",
     },
     packages=find_packages(),
     classifiers=[
