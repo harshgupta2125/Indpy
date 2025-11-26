@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="indpy",
+    name="indpy-core",
     version="0.1.0",
     author="Harsh Gupta",
     author_email="harsh@example.com",  # Update this
