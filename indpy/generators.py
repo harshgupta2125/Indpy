@@ -32,3 +32,14 @@ class Generate:
         series = random.choice(string.ascii_uppercase) + random.choice(string.ascii_uppercase)
         num = f"{random.randint(1, 9999):04}"
         return f"{state}{dist}{series}{num}"
+    
+    @staticmethod
+    def aadhaar() -> str:
+        """
+        Generates a random valid Aadhaar format (12 digits).
+        Ensures it does not start with 0 or 1.
+        """
+        first = random.choice(['2', '3', '4', '5', '6', '7', '8', '9'])        
+        rest = ''.join(random.choices(string.digits, k=11))
+        
+        return first + rest

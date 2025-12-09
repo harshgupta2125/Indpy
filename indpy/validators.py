@@ -91,3 +91,15 @@ def is_gstin(gstin: str) -> bool:
         
     except ValueError:
         return False
+
+def is_aadhaar(aadhaar: str) -> bool:
+    """
+    Validates Aadhaar format (12 digits).
+    Rule: Cannot start with 0 or 1.
+    """
+    if not aadhaar:
+        return False
+    clean_num = str(aadhaar).replace(" ", "").replace("-", "")
+    pattern = r"^[2-9]\d{11}$"    
+    
+    return bool(re.match(pattern, clean_num))
