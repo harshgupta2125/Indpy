@@ -5,6 +5,7 @@ Useful for QA and Development environments.
 
 import random
 import string
+from .utils import generate_verhoeff
 
 class Generate:
     @staticmethod
@@ -32,14 +33,20 @@ class Generate:
         series = random.choice(string.ascii_uppercase) + random.choice(string.ascii_uppercase)
         num = f"{random.randint(1, 9999):04}"
         return f"{state}{dist}{series}{num}"
-    
+
     @staticmethod
     def aadhaar() -> str:
         """
-        Generates a random valid Aadhaar format (12 digits).
+        Generates a random valid Aadhaar number with correct Verhoeff checksum.
         Ensures it does not start with 0 or 1.
         """
+        # Generate first digit (2-9)
         first = random.choice(['2', '3', '4', '5', '6', '7', '8', '9'])        
-        rest = ''.join(random.choices(string.digits, k=11))
+        # Generate next 10 digits
+        middle = ''.join(random.choices(string.digits, k=10))
         
-        return first + rest
+        # Calculate the checksum digit using Verhoeff algorithm
+        base_11 = first + middle
+        checksum = generate_verhoeff(base_11)
+        
+        return base_11 + checksum

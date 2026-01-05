@@ -1,5 +1,6 @@
 # Look! We are importing it just like a standard library
 import indpy
+from indpy import Generate
 
 print("--- TESTING INDPY LIBRARY ---")
 
@@ -50,3 +51,11 @@ if indpy.is_vehicle("UP16Z5555"):
 # Generation (The cool part)
 dummy_pan = indpy.Generate.pan()
 print(f"Generated Test PAN: {dummy_pan}")
+
+fake_id = Generate.aadhaar()
+print(f"Generated: {fake_id}")
+
+if indpy.is_aadhaar(fake_id):
+    print("✅ Success! Generator matches Validator.")
+else:
+    print("❌ Failed.")

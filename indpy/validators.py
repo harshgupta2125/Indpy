@@ -5,6 +5,10 @@ License: MIT
 """
 
 import re
+import random
+import string
+from .utils import generate_verhoeff  # <--- IMPORT THE NEW FILE
+from .utils import validate_verhoeff
 
 # Pre-compiling regex patterns for performance efficiency
 # Source: UIDAI and Income Tax Dept standards
@@ -92,14 +96,41 @@ def is_gstin(gstin: str) -> bool:
     except ValueError:
         return False
 
+class Generate:
+    # ... (keep pan, mobile, etc.) ...
+
+    @staticmethod
+    def aadhaar() -> str:
+        """
+        Generates a mathematically valid Aadhaar number.
+        """
+        # 1. Pick first digit (2-9) to satisfy Regex
+        first = random.choice(['2', '3', '4', '5', '6', '7', '8', '9'])
+        
+        # 2. Pick next 10 digits randomly
+        middle = ''.join(random.choices(string.digits, k=10))
+        
+        # 3. Combine first 11 digits
+        temp_num = first + middle
+        
+        # 4. Calculate the correct 12th digit using Math
+        checksum = generate_verhoeff(temp_num)
+        
+        # 5. Return full 12 digit ID
+        return temp_num + checksum
 def is_aadhaar(aadhaar: str) -> bool:
     """
-    Validates Aadhaar format (12 digits).
-    Rule: Cannot start with 0 or 1.
+    Validates Aadhaar Number using Regex + Verhoeff Algorithm.
     """
     if not aadhaar:
         return False
+
+    # 1. Clean the input
     clean_num = str(aadhaar).replace(" ", "").replace("-", "")
-    pattern = r"^[2-9]\d{11}$"    
-    
-    return bool(re.match(pattern, clean_num))
+
+    # 2. Regex Check: 12 digits, cannot start with 0 or 1
+    if not re.match(r"^[2-9]\d{11}$", clean_num):
+        return False
+
+    # 3. Math Check: Verhoeff Algorithm
+    return validate_verhoeff(clean_num)

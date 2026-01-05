@@ -4,21 +4,23 @@
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/status-stable-success?style=for-the-badge)
 
-indpy is a Python library for validating and generating Indian government documents and financial identifiers. It implements official checksum algorithms (where applicable) to ensure data integrity.
+indpy is a Python library for validating and generating Indian government documents and financial identifiers. It uses the official checksum algorithms (GSTIN Mod-36, Aadhaar Verhoeff) where applicable.
 
 ## 🚀 Features
 
 ### ✅ Validation
-- PAN Card: Structure validation.
-- GSTIN: Structure + Modulo-36 checksum verification.
-- Mobile Number: Indian 10-digit format (starts with 6–9).
-- IFSC Code: Bank branch code validation.
-- Vehicle (RC) Number: Standard RTO formats (e.g., DL01CA1234).
-- UPI ID: Standard handle validation.
+- PAN: Structure validation.
+- GSTIN: Structure + Mod-36 checksum.
+- Aadhaar: Regex + Verhoeff checksum.
+- Mobile: Indian 10-digit format (starts with 6–9).
+- IFSC: Bank branch code validation.
+- Vehicle (RC): Standard RTO formats (e.g., DL01CA1234).
+- UPI: Standard handle validation.
 
 ### 🎲 Data Generation (Mock Data)
-- Generate valid PAN numbers for testing.
+- Generate valid PAN numbers.
 - Generate valid mobile numbers.
+- Generate valid Aadhaar numbers (with Verhoeff checksum).
 - Generate random vehicle registration numbers.
 
 ---
@@ -28,17 +30,17 @@ indpy is a Python library for validating and generating Indian government docume
 Install from PyPI:
 
 ```bash
-pip install indpy-core
+pip install indpy_core
 ```
 
-Note: The package name on PyPI is `indpy-core`, but you import it in Python as `indpy`.
+Note: The package name on PyPI is `indpy_core`, but you import it in Python as `indpy`.
 
 Install for local development:
 
 ```bash
-# Clone the repository (replace YOUR_USERNAME with your GitHub username if needed)
-git clone https://github.com/YOUR_USERNAME/indpy.git
-cd indpy
+# Clone the repository
+git clone https://github.com/harshgupta2125/Indpy.git
+cd Indpy
 pip install -e .
 ```
 
@@ -47,7 +49,7 @@ pip install -e .
 1) Python — Validation
 
 ```python
-from indpy import is_pan, is_gstin, is_vehicle
+from indpy import is_pan, is_gstin, is_vehicle, is_aadhaar
 
 # Validate PAN
 if is_pan("ABCDE1234F"):
@@ -63,6 +65,9 @@ else:
 
 # Validate Vehicle registration
 print(is_vehicle("UP16Z5555"))  # True or False
+
+# Validate Aadhaar (Regex + Verhoeff)
+print(is_aadhaar("379980670385"))  # True or False
 ```
 
 2) Python — Generating Mock Data
@@ -78,6 +83,9 @@ print(Generate.mobile())  # e.g. "9876123450"
 
 # Random Vehicle
 print(Generate.vehicle()) # e.g. "DL04CA9921"
+
+# Random Aadhaar (with valid checksum)
+print(Generate.aadhaar()) # e.g. "379980670385"
 ```
 
 3) Command Line Interface
@@ -93,6 +101,9 @@ Validate a document:
 ```bash
 indpy check pan ABCDE1234F
 # Output: ✅ PAN Validation Result: True
+
+indpy check aadhaar 379980670385
+# Output: ✅ AADHAAR Validation Result: True
 ```
 
 Generate fake data:
@@ -103,14 +114,18 @@ indpy gen pan
 
 indpy gen vehicle
 # Output: DL04CA9921
+
+indpy gen aadhaar
+# Output: 379980670385
 ```
 
 ## 🛠️ Supported Documents
 
 | Document | Regex / Logic (approx.) | Checksum implemented? |
 |---------:|:------------------------|:----------------------:|
-| PAN | `^[A-Z]{5}[0-9]{4}[A-Z]$` | No (Structure only; checksum planned v1.1) |
-| GSTIN | `^\d{2}[A-Z]{5}[0-9A-Z]{9}$` | Yes (Modulo-36 checksum) |
+| PAN | `^[A-Z]{5}[0-9]{4}[A-Z]$` | Structure only |
+| GSTIN | `^\d{2}[A-Z]{5}[0-9A-Z]{9}$` | Yes (Modulo-36) |
+| Aadhaar | `^[2-9]\d{11}$` | Yes (Verhoeff) |
 | Mobile | `^[6-9]\d{9}$` | N/A |
 | IFSC | `^[A-Z]{4}0[A-Z0-9]{6}$` | N/A |
 | Vehicle | `^[A-Z]{2}\d{1,2}[A-Z]{1,2}\d{1,4}$` | N/A |
