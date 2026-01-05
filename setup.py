@@ -4,8 +4,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="indpy-core",
-    version="0.1.1",
+    name="indpy_core",
+    version="0.1.3",
     author="Harsh Gupta",
     author_email="harsh2125gupta@gmail.com",
     description="A comprehensive library for Indian Identity and Financial data validation.",
@@ -16,6 +16,7 @@ setup(
         "Bug Tracker": "https://github.com/harshgupta2125/Indpy/issues",
     },
     packages=find_packages(),
+    license="MIT",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

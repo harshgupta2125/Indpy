@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "indpy_core"
+version = "0.1.3"
+description = "A comprehensive library for Indian Identity and Financial data validation."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Harsh Gupta", email = "harsh2125gupta@gmail.com"},
+]
+requires-python = ">=3.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+Homepage = "https://github.com/harshgupta2125/Indpy"
+"Bug Tracker" = "https://github.com/harshgupta2125/Indpy/issues"
+
+[project.scripts]
+indpy = "indpy.cli:main"
