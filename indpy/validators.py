@@ -134,3 +134,34 @@ def is_aadhaar(aadhaar: str) -> bool:
 
     # 3. Math Check: Verhoeff Algorithm
     return validate_verhoeff(clean_num)
+
+def is_voterid(voter_id: str) -> bool:
+    """
+    Validates Indian Voter ID (EPIC) Number.
+    Standard Format: 3 Letters + 7 Digits (e.g., ABC1234567).
+    """
+    if not voter_id:
+        return False
+    
+    clean_id = str(voter_id).replace(" ", "").upper()
+    
+    # Regex: 3 uppercase letters followed by 7 digits
+    pattern = r"^[A-Z]{3}[0-9]{7}$"
+    
+    return bool(re.match(pattern, clean_id))
+
+def is_passport(passport: str) -> bool:
+    """
+    Validates Indian Passport Number.
+    Format: 1 Letter + 7 Digits (e.g., A1234567).
+    """
+    if not passport:
+        return False
+        
+    clean_pass = str(passport).replace(" ", "").upper()
+    
+    # Regex: First char must be a letter [A-Z], followed by 7 digits
+    # Note: Some older passports might differ, but this is the standard.
+    pattern = r"^[A-Z][0-9]{7}$"
+    
+    return bool(re.match(pattern, clean_pass))

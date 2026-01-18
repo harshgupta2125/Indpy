@@ -24,12 +24,12 @@ def main():
 
     # 'check' command
     check_parser = subparsers.add_parser('check', help='Validate a document')
-    check_parser.add_argument('type', choices=['pan', 'gstin', 'mobile', 'ifsc', 'vehicle', 'aadhaar'], help='Document type')
+    check_parser.add_argument('type', choices=['pan', 'gstin', 'mobile', 'ifsc', 'vehicle', 'aadhaar', 'voterid', 'passport'], help='Document type')
     check_parser.add_argument('value', help='Value to validate')
 
     # 'gen' command
     gen_parser = subparsers.add_parser('gen', help='Generate fake data')
-    gen_parser.add_argument('type', choices=['pan', 'mobile', 'vehicle', 'aadhaar'], help='Data type to generate')
+    gen_parser.add_argument('type', choices=['pan', 'mobile', 'vehicle', 'aadhaar', 'voterid', 'passport'], help='Data type to generate')
     args = parser.parse_args()
 
     # Logic for CHECK
@@ -40,7 +40,9 @@ def main():
             'mobile': validators.is_mobile,
             'ifsc': validators.is_ifsc,
             'vehicle': validators.is_vehicle,
-            'aadhaar': validators.is_aadhaar
+            'aadhaar': validators.is_aadhaar,
+            'voterid': validators.is_voterid,
+            'passport': validators.is_passport
         }
         
         is_valid = func_map[args.type](args.value)
@@ -57,6 +59,10 @@ def main():
             print(generators.Generate.vehicle())
         elif args.type == 'aadhaar':
             print(generators.Generate.aadhaar())
+        elif args.type == 'voterid':
+            print(generators.Generate.voterid())
+        elif args.type == 'passport':
+            print(generators.Generate.passport())
     else:
         parser.print_help()
 

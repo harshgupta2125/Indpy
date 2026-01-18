@@ -12,6 +12,8 @@ indpy is a Python library for validating and generating Indian government docume
 - PAN: Structure validation.
 - GSTIN: Structure + Mod-36 checksum.
 - Aadhaar: Regex + Verhoeff checksum.
+- Voter ID (EPIC): 3 letters + 7 digits.
+- Passport: 1 letter + 7 digits.
 - Mobile: Indian 10-digit format (starts with 6–9).
 - IFSC: Bank branch code validation.
 - Vehicle (RC): Standard RTO formats (e.g., DL01CA1234).
@@ -21,6 +23,8 @@ indpy is a Python library for validating and generating Indian government docume
 - Generate valid PAN numbers.
 - Generate valid mobile numbers.
 - Generate valid Aadhaar numbers (with Verhoeff checksum).
+- Generate Voter ID numbers.
+- Generate Passport numbers.
 - Generate random vehicle registration numbers.
 
 ---
@@ -49,7 +53,7 @@ pip install -e .
 1) Python — Validation
 
 ```python
-from indpy import is_pan, is_gstin, is_vehicle, is_aadhaar
+from indpy import is_pan, is_gstin, is_vehicle, is_aadhaar, is_voterid, is_passport
 
 # Validate PAN
 if is_pan("ABCDE1234F"):
@@ -68,6 +72,12 @@ print(is_vehicle("UP16Z5555"))  # True or False
 
 # Validate Aadhaar (Regex + Verhoeff)
 print(is_aadhaar("379980670385"))  # True or False
+
+# Validate Voter ID
+print(is_voterid("ABC1234567"))  # True or False
+
+# Validate Passport
+print(is_passport("A1234567"))  # True or False
 ```
 
 2) Python — Generating Mock Data
@@ -81,11 +91,17 @@ print(Generate.pan())     # e.g. "BPLPZ5821K"
 # Random Mobile
 print(Generate.mobile())  # e.g. "9876123450"
 
-# Random Vehicle
-print(Generate.vehicle()) # e.g. "DL04CA9921"
-
 # Random Aadhaar (with valid checksum)
 print(Generate.aadhaar()) # e.g. "379980670385"
+
+# Random Voter ID
+print(Generate.voterid()) # e.g. "ABC1234567"
+
+# Random Passport
+print(Generate.passport()) # e.g. "A1234567"
+
+# Random Vehicle
+print(Generate.vehicle()) # e.g. "DL04CA9921"
 ```
 
 3) Command Line Interface
@@ -104,6 +120,12 @@ indpy check pan ABCDE1234F
 
 indpy check aadhaar 379980670385
 # Output: ✅ AADHAAR Validation Result: True
+
+indpy check voterid ABC1234567
+# Output: ✅ VOTERID Validation Result: True
+
+indpy check passport A1234567
+# Output: ✅ PASSPORT Validation Result: True
 ```
 
 Generate fake data:
@@ -117,6 +139,12 @@ indpy gen vehicle
 
 indpy gen aadhaar
 # Output: 379980670385
+
+indpy gen voterid
+# Output: ABC1234567
+
+indpy gen passport
+# Output: A1234567
 ```
 
 ## 🛠️ Supported Documents
@@ -126,6 +154,8 @@ indpy gen aadhaar
 | PAN | `^[A-Z]{5}[0-9]{4}[A-Z]$` | Structure only |
 | GSTIN | `^\d{2}[A-Z]{5}[0-9A-Z]{9}$` | Yes (Modulo-36) |
 | Aadhaar | `^[2-9]\d{11}$` | Yes (Verhoeff) |
+| Voter ID | `^[A-Z]{3}[0-9]{7}$` | N/A |
+| Passport | `^[A-Z][0-9]{7}$` | N/A |
 | Mobile | `^[6-9]\d{9}$` | N/A |
 | IFSC | `^[A-Z]{4}0[A-Z0-9]{6}$` | N/A |
 | Vehicle | `^[A-Z]{2}\d{1,2}[A-Z]{1,2}\d{1,4}$` | N/A |

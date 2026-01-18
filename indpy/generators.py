@@ -50,3 +50,27 @@ class Generate:
         checksum = generate_verhoeff(base_11)
         
         return base_11 + checksum
+
+    @staticmethod
+    def voterid() -> str:
+        """
+        Generates a random valid Voter ID (EPIC).
+        Format: AAA1234567
+        """
+        # 3 Letters
+        letters = ''.join(random.choices(string.ascii_uppercase, k=3))
+        # 7 Digits
+        digits = ''.join(random.choices(string.digits, k=7))
+        return letters + digits
+
+    @staticmethod
+    def passport() -> str:
+        """
+        Generates a random valid Passport Number.
+        Format: A1234567
+        """
+        # 1 Letter
+        letter = random.choice(string.ascii_uppercase)
+        # 7 Digits
+        digits = ''.join(random.choices(string.digits, k=7))
+        return letter + digits
