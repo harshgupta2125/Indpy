@@ -5,6 +5,8 @@
 ![Status](https://img.shields.io/badge/status-production-success?style=for-the-badge)
 ![PyPI](https://img.shields.io/badge/PyPI-0.1.4-blue?style=for-the-badge)
 
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/indpy-core?period=total&units=NONE&left_color=BLACK&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/indpy-core)
+
 indpy is a comprehensive Python library for validating and generating Indian government documents and financial identifiers. It uses official checksum algorithms (GSTIN Mod-36, Aadhaar Verhoeff) where applicable and provides regex-based structural validation for all document types.
 
 ## 🚀 Features
