@@ -1,8 +1,11 @@
 import sys
-sys.path.insert(0, '/home/harsh/Desktop/Indpy')
+from pathlib import Path
 
 import indpy
 from indpy import Generate
+
+# Add project root to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 print("--- TESTING VOTER ID & PASSPORT ---\n")
 
@@ -28,7 +31,7 @@ else:
 print("3️⃣ INVALID INPUT TESTS")
 if not indpy.is_passport("12345678"):  # Starts with number (Invalid)
     print("✅ Correctly rejected invalid Passport (starts with number)")
-    
+
 if not indpy.is_voterid("AB1234567"):  # Only 2 letters (Invalid)
     print("✅ Correctly rejected invalid Voter ID (only 2 letters)")
 

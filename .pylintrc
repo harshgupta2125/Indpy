@@ -1,0 +1,15 @@
+[MASTER]
+max-line-length=88
+disable=
+    missing-docstring,
+    too-many-arguments,
+    invalid-name,
+    C0103
+
+[FORMAT]
+max-line-length=88
+
+[MESSAGES CONTROL]
+disable=
+    C0114,
+    W0622,
