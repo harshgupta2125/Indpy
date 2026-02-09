@@ -1,6 +1,7 @@
 """Core validation logic for Indian Identity and Financial documents."""
 
 import re
+from typing import Iterable, Optional
 from .utils import validate_verhoeff
 
 PATTERNS = {
@@ -53,7 +54,7 @@ def is_mobile(number: str) -> bool:
     return bool(PATTERNS["mobile"].match(clean_num))
 
 
-def is_ifsc(code: str) -> bool:
+def is_ifsc(code: str, valid_bank_codes: Optional[Iterable[str]] = None) -> bool:
     """
     Validates Indian Financial System Code (IFSC).
 
@@ -66,8 +67,22 @@ def is_ifsc(code: str) -> bool:
     Format: AAAA0XXXXXX (11 characters total)
     Example: SBIN0004321
     Usage: is_ifsc("SBIN0004321") -> True
+
+    Optional: pass valid_bank_codes to enforce known bank codes.
     """
-    return bool(PATTERNS["ifsc"].match(str(code).upper()))
+    if not code:
+        return False
+
+    clean_code = str(code).replace(" ", "").upper()
+    if not PATTERNS["ifsc"].match(clean_code):
+        return False
+
+    if valid_bank_codes is not None:
+        bank_code = clean_code[:4]
+        if bank_code not in {str(c).upper() for c in valid_bank_codes}:
+            return False
+
+    return True
 
 
 def is_vehicle(number: str) -> bool:

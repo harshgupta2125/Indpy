@@ -86,6 +86,10 @@ print(is_mobile("9876543210"))  # True
 # Validate IFSC code (Bank branch)
 print(is_ifsc("SBIN0004321"))  # True
 
+# Optional: enforce known bank codes
+known_banks = {"SBIN", "HDFC", "ICIC"}
+print(is_ifsc("SBIN0004321", valid_bank_codes=known_banks))  # True
+
 # Validate Vehicle registration number
 print(is_vehicle("DL01CA1234"))  # True
 
