@@ -16,7 +16,6 @@ setup(
         "Bug Tracker": "https://github.com/harshgupta2125/Indpy/issues",
     },
     packages=find_packages(),
-    license="MIT",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
