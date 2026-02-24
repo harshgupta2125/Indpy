@@ -2,7 +2,7 @@
 
 import random
 import string
-from .utils import generate_verhoeff
+from .utils import generate_verhoeff, generate_luhn_check_digit
 
 
 class Generate:
@@ -72,3 +72,13 @@ class Generate:
         first = random.randint(1, 9)
         rest = "".join(random.choices(string.digits, k=5))
         return f"{first}{rest}"
+
+    @staticmethod
+    def credit_card() -> str:
+        """
+        Generates a random, valid 16-digit credit card number.
+        Defaults to a Visa format (starts with 4).
+        """
+        partial = "4" + "".join(random.choices(string.digits, k=14))
+        check_digit = generate_luhn_check_digit(partial)
+        return partial + check_digit

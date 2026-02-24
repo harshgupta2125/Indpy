@@ -1,6 +1,6 @@
 """Indian Identity and Financial document validation library."""
 
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 __author__ = "Harsh Gupta"
 
 from .validators import (
@@ -15,6 +15,7 @@ from .validators import (
     is_passport,
     is_cin,
     is_pincode,
+    is_credit_card,
 )
 from .generators import Generate
 
@@ -30,5 +31,6 @@ __all__ = [
     "is_passport",
     "is_cin",
     "is_pincode",
+    "is_credit_card",
     "Generate",
 ]

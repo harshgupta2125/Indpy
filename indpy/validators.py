@@ -2,12 +2,13 @@
 
 import re
 from typing import Iterable, Optional
-from .utils import validate_verhoeff
+from .utils import validate_verhoeff, validate_luhn
 
 PATTERNS = {
     "pan": re.compile(r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"),
     "mobile": re.compile(r"^[6-9]\d{9}$"),
     "ifsc": re.compile(r"^[A-Z]{4}0[A-Z0-9]{6}$"),
+    "credit_card": re.compile(r"^\d{13,19}$"),
     "vehicle": re.compile(r"^[A-Z]{2}[0-9]{1,2}[A-Z]{0,3}[0-9]{4}$"),
     "upi": re.compile(r"^[\w\.\-]+@[\w\.\-]+$"),
     "voterid": re.compile(r"^[A-Z]{3}[0-9]{7}$"),
@@ -266,3 +267,24 @@ def is_pincode(pincode: str) -> bool:
         return False
     pincode = str(pincode).replace(" ", "")
     return bool(PATTERNS["pincode"].match(pincode))
+
+
+def is_credit_card(card_number: str) -> bool:
+    """
+    Validates Credit/Debit Card numbers (Visa, MasterCard, RuPay, Amex).
+
+    Uses the Luhn Algorithm (Mod 10) to verify the checksum digit.
+    Accepts spaces and dashes (automatically removed).
+
+    Example: 4532123456781234
+    Usage: is_credit_card("4532 1234 5678 1234") -> True
+    """
+    if not card_number:
+        return False
+
+    clean_num = str(card_number).replace(" ", "").replace("-", "")
+
+    if not PATTERNS["credit_card"].match(clean_num):
+        return False
+
+    return validate_luhn(clean_num)

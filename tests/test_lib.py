@@ -11,6 +11,7 @@ from indpy import (
     is_upi,
     is_cin,
     is_pincode,
+    is_credit_card,
     Generate,
 )
 
@@ -216,6 +217,7 @@ class TestGeneratorConsistency:
             (is_vehicle, Generate.vehicle),
             (is_cin, Generate.cin),
             (is_pincode, Generate.pincode),
+            (is_credit_card, Generate.credit_card),
         ]
 
         for validator, generator in validators_and_generators:
@@ -244,6 +246,28 @@ class TestEdgeCases:
     def test_mixed_case(self):
         assert is_pan("abcde1234f") is True
         assert is_voterid("abc1234567") is True
+
+
+class TestCreditCard:
+    def test_valid_credit_card(self):
+        assert is_credit_card("4111111111111111") is True
+        assert is_credit_card("5555555555554444") is True
+        assert is_credit_card("378282246310005") is True
+
+    def test_valid_credit_card_with_separators(self):
+        assert is_credit_card("4111 1111 1111 1111") is True
+        assert is_credit_card("4111-1111-1111-1111") is True
+
+    def test_invalid_credit_card(self):
+        assert is_credit_card("4111111111111112") is False
+        assert is_credit_card("123456789012") is False
+        assert is_credit_card("") is False
+
+    def test_credit_card_generator(self):
+        generated = Generate.credit_card()
+        assert is_credit_card(generated) is True
+        assert len(generated) == 16
+        assert generated[0] == "4"
 
 
 if __name__ == "__main__":

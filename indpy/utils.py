@@ -43,3 +43,43 @@ def generate_verhoeff(num_str: str) -> str:
     for i, item in enumerate(my_array):
         c = VERHOEFF_D[c][VERHOEFF_P[(i + 1) % 8][item]]
     return str(VERHOEFF_INV[c])
+
+
+def validate_luhn(card_number: str) -> bool:
+    """Validates a number using the Luhn algorithm (Mod 10)."""
+    digits = [int(d) for d in str(card_number) if d.isdigit()]
+    if not digits:
+        return False
+
+    checksum = 0
+    is_second = False
+
+    for digit in reversed(digits):
+        if is_second:
+            digit = digit * 2
+            if digit > 9:
+                digit -= 9
+        checksum += digit
+        is_second = not is_second
+
+    return checksum % 10 == 0
+
+
+def generate_luhn_check_digit(partial_number: str) -> str:
+    """Calculates the Luhn check digit for a given partial number."""
+    digits = [int(d) for d in str(partial_number) if d.isdigit()]
+    if not digits:
+        return "0"
+
+    checksum = 0
+    is_second = True
+
+    for digit in reversed(digits):
+        if is_second:
+            digit = digit * 2
+            if digit > 9:
+                digit -= 9
+        checksum += digit
+        is_second = not is_second
+
+    return str((10 - (checksum % 10)) % 10)

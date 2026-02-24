@@ -3,7 +3,7 @@
 ![Python Version](https://img.shields.io/badge/python-3.6%2B-blue?style=for-the-badge&logo=python)
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/status-production-success?style=for-the-badge)
-![PyPI](https://img.shields.io/badge/PyPI-0.1.4-blue?style=for-the-badge)
+![PyPI](https://img.shields.io/badge/PyPI-0.1.6-blue?style=for-the-badge)
 
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/indpy-core?period=total&units=NONE&left_color=BLACK&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/indpy-core)
 
@@ -11,7 +11,7 @@ indpy is a comprehensive Python library for validating and generating Indian gov
 
 ## 🚀 Features
 
-### ✅ Validation (11 Document Types)
+### ✅ Validation (12 Document Types)
 - **PAN**: Permanent Account Number (5 letters + 4 digits + 1 letter)
 - **GSTIN**: GST Identification Number (with Mod-36 checksum verification)
 - **Aadhaar**: 12-digit unique identity (with Verhoeff checksum algorithm)
@@ -23,8 +23,9 @@ indpy is a comprehensive Python library for validating and generating Indian gov
 - **UPI**: Unified Payments Interface handle
 - **CIN**: Corporate Identification Number (21-character corporate format)
 - **Pincode**: Indian postal code (6 digits, no leading zero)
+- **Credit Card**: 13–19 digit card numbers (with Luhn Mod-10 checksum)
 
-### 🎲 Data Generation (8 Mock Data Generators)
+### 🎲 Data Generation (9 Mock Data Generators)
 - Generate valid PAN numbers with realistic format
 - Generate valid mobile numbers (6–9 prefix)
 - Generate valid Aadhaar numbers with mathematically correct Verhoeff checksum
@@ -33,6 +34,7 @@ indpy is a comprehensive Python library for validating and generating Indian gov
 - Generate Vehicle registration numbers
 - Generate CIN numbers
 - Generate Pincode numbers
+- Generate valid Visa-format credit card numbers (Luhn checksum)
 
 ---
 
@@ -62,7 +64,8 @@ pip install -e .
 ```python
 from indpy import (
     is_pan, is_gstin, is_vehicle, is_aadhaar, is_voterid, 
-    is_passport, is_mobile, is_ifsc, is_upi, is_cin, is_pincode
+   is_passport, is_mobile, is_ifsc, is_upi, is_cin, is_pincode,
+   is_credit_card
 )
 
 # Validate PAN (Permanent Account Number)
@@ -101,6 +104,9 @@ print(is_cin("L99999MH2014PLC241895"))  # True
 
 # Validate Pincode (6 digits, no leading zero)
 print(is_pincode("560034"))  # True
+
+# Validate Credit/Debit Card (Luhn Mod-10)
+print(is_credit_card("4111 1111 1111 1111"))  # True
 ```
 
 ### 2️⃣ Python — Generating Mock Data
@@ -131,6 +137,9 @@ print(Generate.cin())      # e.g. "L12345AB2024PLC123456"
 
 # Generate random Pincode
 print(Generate.pincode())  # e.g. "560034"
+
+# Generate random Credit Card (Visa-like, Luhn-valid)
+print(Generate.credit_card())  # e.g. "4532123456781234"
 ```
 
 ### 3️⃣ Command Line Interface
@@ -139,7 +148,7 @@ Check version:
 
 ```bash
 indpy --version
-# Output: 0.1.4
+# Output: 0.1.6
 ```
 
 Validate a document:
@@ -168,6 +177,10 @@ indpy check cin L99999MH2014PLC241895
 # Validate Pincode
 indpy check pincode 560034
 # Output: ✅ PINCODE Validation Result: True
+
+# Validate Credit Card
+indpy check credit_card 4111111111111111
+# Output: ✅ CREDIT_CARD Validation Result: True
 ```
 
 Generate mock data:
@@ -200,6 +213,10 @@ indpy gen cin
 # Generate Pincode
 indpy gen pincode
 # Output: 560034
+
+# Generate Credit Card
+indpy gen credit_card
+# Output: 4XXXXXXXXXXXXXXX
 ```
 
 ## 🛠️ Supported Documents
@@ -217,6 +234,7 @@ indpy gen pincode
 | UPI | `^[a-zA-Z0-9.\-_]+@[a-zA-Z]+$` | N/A | Payment handle |
 | CIN | `^[A-Z][0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$` | N/A | Corporate ID (21-char) |
 | Pincode | `^[1-9]\d{5}$` | N/A | 6-digit postal code |
+| Credit Card | `^\d{13,19}$` | **Luhn (Mod-10)** | Global card checksum standard |
 � Testing
 
 Run the comprehensive test suite:
@@ -233,7 +251,7 @@ python3 -m pytest tests/ --cov=indpy
 ```
 
 Test files include:
-- **test_lib.py**: Comprehensive tests for all 11 validators and 8 generators
+- **test_lib.py**: Comprehensive tests for all 12 validators and 9 generators
 - Coverage includes structural validation, checksum algorithms, and edge cases
 
 ## 🤝 Contributing
@@ -278,6 +296,7 @@ is_vehicle(vehicle: str) -> bool
 is_upi(upi: str) -> bool
 is_cin(cin: str) -> bool
 is_pincode(pincode: str) -> bool
+is_credit_card(card_number: str) -> bool
 ```
 
 ### Generators
@@ -291,6 +310,7 @@ Generate.mobile() -> str
 Generate.vehicle() -> str
 Generate.cin() -> str
 Generate.pincode() -> str
+Generate.credit_card() -> str
 ```
 
 ## 📄 License
@@ -299,12 +319,22 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## 📊 Project Status
 
-**Version:** 0.1.5
+**Version:** 0.1.6
+
+## 🆕 What's New in 0.1.6
+
+- Added credit/debit card validation via Luhn (Mod-10): `is_credit_card(...)`
+- Added valid Visa-style test card generation: `Generate.credit_card()`
+- Added CLI support:
+   - `indpy check credit_card <number>`
+   - `indpy gen credit_card`
+- Updated tests and documentation for new validator and generator
 
 **Features:**
 - ✅ 11 document validators (all functional)
-- ✅ 8 mock data generators (production-ready)
-- ✅ Official checksum algorithms (Verhoeff, Mod-36)
+- ✅ 12 document validators (all functional)
+- ✅ 9 mock data generators (production-ready)
+- ✅ Official checksum algorithms (Verhoeff, Mod-36, Luhn)
 - ✅ Comprehensive documentation with regex patterns
 - ✅ CLI support for validation and generation
 - ✅ PEP 8 compliant codebase

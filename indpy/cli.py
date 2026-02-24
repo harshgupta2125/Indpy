@@ -40,6 +40,7 @@ def main():
             "passport",
             "cin",
             "pincode",
+            "credit_card",
         ],
         help="Document type",
     )
@@ -58,6 +59,7 @@ def main():
             "passport",
             "cin",
             "pincode",
+            "credit_card",
         ],
         help="Data type to generate",
     )
@@ -76,6 +78,7 @@ def main():
             "passport": validators.is_passport,
             "cin": validators.is_cin,
             "pincode": validators.is_pincode,
+            "credit_card": validators.is_credit_card,
         }
 
         is_valid = func_map[args.type](args.value)
@@ -93,6 +96,7 @@ def main():
             "passport": generators.Generate.passport,
             "cin": generators.Generate.cin,
             "pincode": generators.Generate.pincode,
+            "credit_card": generators.Generate.credit_card,
         }
         print(gen_map[args.type]())
     else:

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "indpy_core"
-version = "0.1.5"
+version = "0.1.6"
 description = "A comprehesive library for Indian Identity and Financial data validation."
 readme = "README.md"
 license = {text = "MIT"}
