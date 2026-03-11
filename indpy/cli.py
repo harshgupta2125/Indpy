@@ -31,6 +31,8 @@ def main():
         "type",
         choices=[
             "pan",
+            "tan",
+            "dl",
             "gstin",
             "mobile",
             "ifsc",
@@ -52,6 +54,8 @@ def main():
         "type",
         choices=[
             "pan",
+            "tan",
+            "dl",
             "mobile",
             "vehicle",
             "aadhaar",
@@ -69,6 +73,8 @@ def main():
     if args.command == "check":
         func_map = {
             "pan": validators.is_pan,
+            "tan": validators.is_tan,
+            "dl": validators.is_dl,
             "gstin": validators.is_gstin,
             "mobile": validators.is_mobile,
             "ifsc": validators.is_ifsc,
@@ -89,6 +95,8 @@ def main():
     elif args.command == "gen":
         gen_map = {
             "pan": generators.Generate.pan,
+            "tan": generators.Generate.tan,
+            "dl": generators.Generate.dl,
             "mobile": generators.Generate.mobile,
             "vehicle": generators.Generate.vehicle,
             "aadhaar": generators.Generate.aadhaar,

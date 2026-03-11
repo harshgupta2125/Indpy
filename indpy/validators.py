@@ -6,6 +6,8 @@ from .utils import validate_verhoeff, validate_luhn
 
 PATTERNS = {
     "pan": re.compile(r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"),
+    "tan": re.compile(r"^[A-Z]{4}[0-9]{5}[A-Z]$"),
+    "dl": re.compile(r"^[A-Z]{2}[0-9]{2}[0-9]{4}[0-9]{7}$"),
     "mobile": re.compile(r"^[6-9]\d{9}$"),
     "ifsc": re.compile(r"^[A-Z]{4}0[A-Z0-9]{6}$"),
     "credit_card": re.compile(r"^\d{13,19}$"),
@@ -34,6 +36,34 @@ def is_pan(pan_number: str) -> bool:
     if not isinstance(pan_number, str):
         return False
     return bool(PATTERNS["pan"].match(pan_number.upper()))
+
+
+def is_tan(tan_number: str) -> bool:
+    """
+    Validates Tax Deduction and Collection Account Number (TAN).
+
+    Regex: ^[A-Z]{4}[0-9]{5}[A-Z]$
+    Format: 4 Letters + 5 Digits + 1 Letter
+    Example: DELM12345L
+    """
+    if not tan_number:
+        return False
+    return bool(PATTERNS["tan"].match(str(tan_number).strip().upper()))
+
+
+def is_dl(dl_number: str) -> bool:
+    """
+    Validates Indian Driving License Number (Standard Sarathi Format).
+
+    Regex: ^[A-Z]{2}[0-9]{2}[0-9]{4}[0-9]{7}$
+    Format: State(2) + RTO(2) + Year(4) + Number(7) (15 chars total)
+    Example: MH1220140001234
+    Accepts: Spaces and dashes (automatically removed)
+    """
+    if not dl_number:
+        return False
+    clean_dl = str(dl_number).replace(" ", "").replace("-", "").upper()
+    return bool(PATTERNS["dl"].match(clean_dl))
 
 
 def is_mobile(number: str) -> bool:

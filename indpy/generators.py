@@ -17,6 +17,23 @@ class Generate:
         return f"{prefix}P{random.choice(string.ascii_uppercase)}{digits}{suffix}"
 
     @staticmethod
+    def tan() -> str:
+        """Generates a random valid TAN number."""
+        first_four = "".join(random.choices(string.ascii_uppercase, k=4))
+        digits = "".join(random.choices(string.digits, k=5))
+        last_char = random.choice(string.ascii_uppercase)
+        return first_four + digits + last_char
+
+    @staticmethod
+    def dl() -> str:
+        """Generates a random Indian Driving License number."""
+        state = random.choice(["MH", "DL", "KA", "UP", "TN", "GJ", "WB"])
+        rto = f"{random.randint(1, 99):02d}"
+        year = str(random.randint(1990, 2024))
+        number = "".join(random.choices(string.digits, k=7))
+        return state + rto + year + number
+
+    @staticmethod
     def mobile() -> str:
         """Generate valid Indian mobile number."""
         start = random.choice("6789")

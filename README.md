@@ -3,7 +3,7 @@
 ![Python Version](https://img.shields.io/badge/python-3.6%2B-blue?style=for-the-badge&logo=python)
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/status-production-success?style=for-the-badge)
-![PyPI](https://img.shields.io/badge/PyPI-0.1.6-blue?style=for-the-badge)
+![PyPI](https://img.shields.io/badge/PyPI-0.1.7-blue?style=for-the-badge)
 
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/indpy-core?period=total&units=NONE&left_color=BLACK&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/indpy-core)
 
@@ -11,8 +11,10 @@ indpy is a comprehensive Python library for validating and generating Indian gov
 
 ## 🚀 Features
 
-### ✅ Validation (12 Document Types)
+### ✅ Validation (14 Document Types)
 - **PAN**: Permanent Account Number (5 letters + 4 digits + 1 letter)
+- **TAN**: Tax Deduction and Collection Account Number (4 letters + 5 digits + 1 letter)
+- **Driving License (DL)**: State + RTO + Year + serial number (15 characters)
 - **GSTIN**: GST Identification Number (with Mod-36 checksum verification)
 - **Aadhaar**: 12-digit unique identity (with Verhoeff checksum algorithm)
 - **Voter ID (EPIC)**: Electoral ID (3 letters + 7 digits)
@@ -25,8 +27,10 @@ indpy is a comprehensive Python library for validating and generating Indian gov
 - **Pincode**: Indian postal code (6 digits, no leading zero)
 - **Credit Card**: 13–19 digit card numbers (with Luhn Mod-10 checksum)
 
-### 🎲 Data Generation (9 Mock Data Generators)
+### 🎲 Data Generation (11 Mock Data Generators)
 - Generate valid PAN numbers with realistic format
+- Generate valid TAN numbers
+- Generate valid Driving License numbers
 - Generate valid mobile numbers (6–9 prefix)
 - Generate valid Aadhaar numbers with mathematically correct Verhoeff checksum
 - Generate Voter ID numbers
@@ -65,11 +69,17 @@ pip install -e .
 from indpy import (
     is_pan, is_gstin, is_vehicle, is_aadhaar, is_voterid, 
    is_passport, is_mobile, is_ifsc, is_upi, is_cin, is_pincode,
-   is_credit_card
+   is_credit_card, is_tan, is_dl
 )
 
 # Validate PAN (Permanent Account Number)
 print(is_pan("ABCDE1234F"))  # True
+
+# Validate TAN
+print(is_tan("DELM12345L"))  # True
+
+# Validate Driving License
+print(is_dl("MH1220140001234"))  # True
 
 # Validate GSTIN (includes official Mod-36 checksum)
 print(is_gstin("29ABCDE1234F1Z5"))  # True/False based on checksum
@@ -117,6 +127,12 @@ from indpy import Generate
 # Generate random PAN
 print(Generate.pan())      # e.g. "BPLPZ5821K"
 
+# Generate random TAN
+print(Generate.tan())      # e.g. "DELM12345L"
+
+# Generate random Driving License
+print(Generate.dl())       # e.g. "MH1220140001234"
+
 # Generate random mobile number
 print(Generate.mobile())   # e.g. "9876123450"
 
@@ -148,7 +164,7 @@ Check version:
 
 ```bash
 indpy --version
-# Output: 0.1.6
+# Output: 0.1.7
 ```
 
 Validate a document:
@@ -157,6 +173,14 @@ Validate a document:
 # Validate PAN
 indpy check pan ABCDE1234F
 # Output: ✅ PAN Validation Result: True
+
+# Validate TAN
+indpy check tan DELM12345L
+# Output: ✅ TAN Validation Result: True
+
+# Validate Driving License
+indpy check dl MH1220140001234
+# Output: ✅ DL Validation Result: True
 
 # Validate Aadhaar
 indpy check aadhaar 379980670385
@@ -189,6 +213,14 @@ Generate mock data:
 # Generate PAN
 indpy gen pan
 # Output: ABCDE1234F
+
+# Generate TAN
+indpy gen tan
+# Output: ABCD12345E
+
+# Generate Driving License
+indpy gen dl
+# Output: MH1220140001234
 
 # Generate Aadhaar
 indpy gen aadhaar
@@ -224,6 +256,8 @@ indpy gen credit_card
 | Document | Regex Pattern | Checksum | Notes |
 |:---------|:--------------|:--------:|:------|
 | PAN | `^[A-Z]{5}[0-9]{4}[A-Z]$` | Structure only | 10-character format |
+| TAN | `^[A-Z]{4}[0-9]{5}[A-Z]$` | Structure only | TDS/TCS account number |
+| Driving License | `^[A-Z]{2}[0-9]{2}[0-9]{4}[0-9]{7}$` | N/A | Sarathi-style 15-character format |
 | GSTIN | `^[0-9]{2}[A-Z]{5}[0-9A-Z]{9}[0-9]$` | **Mod-36** | 15-character GST ID |
 | Aadhaar | `^[2-9]\d{11}$` | **Verhoeff** | 12-digit unique ID |
 | Voter ID | `^[A-Z]{3}[0-9]{7}$` | N/A | EPIC format |
@@ -251,7 +285,7 @@ python3 -m pytest tests/ --cov=indpy
 ```
 
 Test files include:
-- **test_lib.py**: Comprehensive tests for all 12 validators and 9 generators
+- **test_lib.py**: Comprehensive tests for all 14 validators and 11 generators
 - Coverage includes structural validation, checksum algorithms, and edge cases
 
 ## 🤝 Contributing
@@ -286,6 +320,8 @@ All validators return a **boolean** (True/False). All generators return a **stri
 ### Validators
 ```python
 is_pan(pan: str) -> bool
+is_tan(tan: str) -> bool
+is_dl(dl: str) -> bool
 is_gstin(gstin: str) -> bool
 is_aadhaar(aadhaar: str) -> bool
 is_voterid(voterid: str) -> bool
@@ -302,6 +338,8 @@ is_credit_card(card_number: str) -> bool
 ### Generators
 ```python
 Generate.pan() -> str
+Generate.tan() -> str
+Generate.dl() -> str
 Generate.gstin() -> str  # Note: Does not generate checksum
 Generate.aadhaar() -> str  # With valid Verhoeff checksum
 Generate.voterid() -> str
@@ -319,7 +357,19 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## 📊 Project Status
 
-**Version:** 0.1.6
+**Version:** 0.1.7
+
+## 🆕 What's New in 0.1.7
+
+- Added TAN validator: `is_tan(...)`
+- Added Driving License validator: `is_dl(...)`
+- Added generators: `Generate.tan()` and `Generate.dl()`
+- Added CLI support:
+   - `indpy check tan <number>`
+   - `indpy check dl <number>`
+   - `indpy gen tan`
+   - `indpy gen dl`
+- Updated tests and documentation for both features
 
 ## 🆕 What's New in 0.1.6
 
@@ -331,9 +381,8 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for details.
 - Updated tests and documentation for new validator and generator
 
 **Features:**
-- ✅ 11 document validators (all functional)
-- ✅ 12 document validators (all functional)
-- ✅ 9 mock data generators (production-ready)
+- ✅ 14 document validators (all functional)
+- ✅ 11 mock data generators (production-ready)
 - ✅ Official checksum algorithms (Verhoeff, Mod-36, Luhn)
 - ✅ Comprehensive documentation with regex patterns
 - ✅ CLI support for validation and generation
@@ -341,7 +390,6 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for details.
 - ✅ Full test coverage
 
 **Roadmap:**
-- [ ] Add Driving License validator
 - [ ] Add Enrollment ID (UID) validator
 - [ ] Add GST Certificate validator
 - [ ] Add international passport format support

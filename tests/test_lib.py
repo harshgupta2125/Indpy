@@ -1,6 +1,8 @@
 import pytest
 from indpy import (
     is_pan,
+    is_tan,
+    is_dl,
     is_gstin,
     is_vehicle,
     is_aadhaar,
@@ -31,6 +33,43 @@ class TestPAN:
         generated = Generate.pan()
         assert is_pan(generated) is True
         assert len(generated) == 10
+
+
+class TestTAN:
+    def test_valid_tan(self):
+        assert is_tan("DELM12345L") is True
+        assert is_tan("ABCD12345Z") is True
+
+    def test_invalid_tan(self):
+        assert is_tan("DEL12345L") is False
+        assert is_tan("DELM1234L") is False
+        assert is_tan("DELM123456") is False
+        assert is_tan("") is False
+
+    def test_tan_generator(self):
+        generated = Generate.tan()
+        assert is_tan(generated) is True
+        assert len(generated) == 10
+
+
+class TestDL:
+    def test_valid_dl(self):
+        assert is_dl("MH1220140001234") is True
+        assert is_dl("DL0120201234567") is True
+
+    def test_valid_dl_with_separators(self):
+        assert is_dl("MH12-2014-0001234") is True
+        assert is_dl("MH12 2014 0001234") is True
+
+    def test_invalid_dl(self):
+        assert is_dl("MH122014000123") is False
+        assert is_dl("M1220140001234") is False
+        assert is_dl("") is False
+
+    def test_dl_generator(self):
+        generated = Generate.dl()
+        assert is_dl(generated) is True
+        assert len(generated) == 15
 
 
 class TestGSTIN:
@@ -210,6 +249,8 @@ class TestGeneratorConsistency:
     def test_generated_documents_validate(self):
         validators_and_generators = [
             (is_pan, Generate.pan),
+            (is_tan, Generate.tan),
+            (is_dl, Generate.dl),
             (is_aadhaar, Generate.aadhaar),
             (is_voterid, Generate.voterid),
             (is_passport, Generate.passport),
