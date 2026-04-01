@@ -34,6 +34,26 @@ class Generate:
         return state + rto + year + number
 
     @staticmethod
+    def uan() -> str:
+        """Generates a random valid UAN (12 digits)."""
+        return "100" + "".join(random.choices(string.digits, k=9))
+
+    @staticmethod
+    def abha(formatted: bool = True) -> str:
+        """
+        Generates a random ABHA Health ID (14 digits).
+        If formatted is True, returns with standard hyphens (XX-XXXX-XXXX-XXXX).
+        """
+        part1 = str(random.randint(11, 99))
+        part2 = "".join(random.choices(string.digits, k=4))
+        part3 = "".join(random.choices(string.digits, k=4))
+        part4 = "".join(random.choices(string.digits, k=4))
+
+        if formatted:
+            return f"{part1}-{part2}-{part3}-{part4}"
+        return part1 + part2 + part3 + part4
+
+    @staticmethod
     def mobile() -> str:
         """Generate valid Indian mobile number."""
         start = random.choice("6789")

@@ -1,6 +1,6 @@
 """Indian Identity and Financial document validation library."""
 
-__version__ = "0.1.7"
+__version__ = "0.1.8"
 __author__ = "Harsh Gupta"
 
 from .validators import (
@@ -8,6 +8,8 @@ from .validators import (
     is_pan,
     is_tan,
     is_dl,
+    is_uan,
+    is_abha,
     is_gstin,
     is_ifsc,
     is_vehicle,
@@ -26,6 +28,8 @@ __all__ = [
     "is_pan",
     "is_tan",
     "is_dl",
+    "is_uan",
+    "is_abha",
     "is_gstin",
     "is_ifsc",
     "is_vehicle",

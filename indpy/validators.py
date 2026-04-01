@@ -8,6 +8,8 @@ PATTERNS = {
     "pan": re.compile(r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"),
     "tan": re.compile(r"^[A-Z]{4}[0-9]{5}[A-Z]$"),
     "dl": re.compile(r"^[A-Z]{2}[0-9]{2}[0-9]{4}[0-9]{7}$"),
+    "uan": re.compile(r"^[1-9]\d{11}$"),
+    "abha": re.compile(r"^[1-9]\d{13}$"),
     "mobile": re.compile(r"^[6-9]\d{9}$"),
     "ifsc": re.compile(r"^[A-Z]{4}0[A-Z0-9]{6}$"),
     "credit_card": re.compile(r"^\d{13,19}$"),
@@ -64,6 +66,35 @@ def is_dl(dl_number: str) -> bool:
         return False
     clean_dl = str(dl_number).replace(" ", "").replace("-", "").upper()
     return bool(PATTERNS["dl"].match(clean_dl))
+
+
+def is_uan(uan_number: str) -> bool:
+    """
+    Validates EPFO Universal Account Number (UAN).
+
+    Regex: ^[1-9]\\d{11}$
+    Format: Exactly 12 digits, cannot start with 0.
+    Example: 100012345678
+    """
+    if not uan_number:
+        return False
+    clean_uan = str(uan_number).replace(" ", "").replace("-", "")
+    return bool(PATTERNS["uan"].match(clean_uan))
+
+
+def is_abha(abha_id: str) -> bool:
+    """
+    Validates Ayushman Bharat Health Account (ABHA) Number.
+
+    Regex: ^[1-9]\\d{13}$
+    Format: Exactly 14 digits.
+    Example: 91-1234-5678-9012 or 91123456789012
+    Accepts: Spaces and dashes (automatically removed)
+    """
+    if not abha_id:
+        return False
+    clean_abha = str(abha_id).replace(" ", "").replace("-", "")
+    return bool(PATTERNS["abha"].match(clean_abha))
 
 
 def is_mobile(number: str) -> bool:

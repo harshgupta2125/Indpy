@@ -3,6 +3,8 @@ from indpy import (
     is_pan,
     is_tan,
     is_dl,
+    is_uan,
+    is_abha,
     is_gstin,
     is_vehicle,
     is_aadhaar,
@@ -70,6 +72,44 @@ class TestDL:
         generated = Generate.dl()
         assert is_dl(generated) is True
         assert len(generated) == 15
+
+
+class TestUAN:
+    def test_valid_uan(self):
+        assert is_uan("100012345678") is True
+        assert is_uan("123456789012") is True
+
+    def test_invalid_uan(self):
+        assert is_uan("023456789012") is False
+        assert is_uan("12345678901") is False
+        assert is_uan("1234567890123") is False
+        assert is_uan("") is False
+
+    def test_uan_generator(self):
+        generated = Generate.uan()
+        assert is_uan(generated) is True
+        assert len(generated) == 12
+        assert generated.startswith("100")
+
+
+class TestABHA:
+    def test_valid_abha(self):
+        assert is_abha("91123456789012") is True
+        assert is_abha("91-1234-5678-9012") is True
+
+    def test_invalid_abha(self):
+        assert is_abha("01123456789012") is False
+        assert is_abha("9112345678901") is False
+        assert is_abha("911234567890123") is False
+        assert is_abha("") is False
+
+    def test_abha_generator(self):
+        generated_formatted = Generate.abha()
+        generated_raw = Generate.abha(formatted=False)
+        assert is_abha(generated_formatted) is True
+        assert is_abha(generated_raw) is True
+        assert "-" in generated_formatted
+        assert len(generated_raw) == 14
 
 
 class TestGSTIN:
@@ -251,6 +291,8 @@ class TestGeneratorConsistency:
             (is_pan, Generate.pan),
             (is_tan, Generate.tan),
             (is_dl, Generate.dl),
+            (is_uan, Generate.uan),
+            (is_abha, Generate.abha),
             (is_aadhaar, Generate.aadhaar),
             (is_voterid, Generate.voterid),
             (is_passport, Generate.passport),

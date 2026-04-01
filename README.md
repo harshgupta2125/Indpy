@@ -3,7 +3,7 @@
 ![Python Version](https://img.shields.io/badge/python-3.6%2B-blue?style=for-the-badge&logo=python)
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/status-production-success?style=for-the-badge)
-![PyPI](https://img.shields.io/badge/PyPI-0.1.7-blue?style=for-the-badge)
+![PyPI](https://img.shields.io/badge/PyPI-0.1.8-blue?style=for-the-badge)
 
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/indpy-core?period=total&units=NONE&left_color=BLACK&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/indpy-core)
 
@@ -11,10 +11,12 @@ indpy is a comprehensive Python library for validating and generating Indian gov
 
 ## 🚀 Features
 
-### ✅ Validation (14 Document Types)
+### ✅ Validation (16 Document Types)
 - **PAN**: Permanent Account Number (5 letters + 4 digits + 1 letter)
 - **TAN**: Tax Deduction and Collection Account Number (4 letters + 5 digits + 1 letter)
 - **Driving License (DL)**: State + RTO + Year + serial number (15 characters)
+- **UAN**: EPFO Universal Account Number (12 digits, no leading zero)
+- **ABHA ID**: Ayushman Bharat Health Account Number (14 digits)
 - **GSTIN**: GST Identification Number (with Mod-36 checksum verification)
 - **Aadhaar**: 12-digit unique identity (with Verhoeff checksum algorithm)
 - **Voter ID (EPIC)**: Electoral ID (3 letters + 7 digits)
@@ -27,10 +29,12 @@ indpy is a comprehensive Python library for validating and generating Indian gov
 - **Pincode**: Indian postal code (6 digits, no leading zero)
 - **Credit Card**: 13–19 digit card numbers (with Luhn Mod-10 checksum)
 
-### 🎲 Data Generation (11 Mock Data Generators)
+### 🎲 Data Generation (13 Mock Data Generators)
 - Generate valid PAN numbers with realistic format
 - Generate valid TAN numbers
 - Generate valid Driving License numbers
+- Generate valid UAN numbers
+- Generate valid ABHA IDs (formatted and raw)
 - Generate valid mobile numbers (6–9 prefix)
 - Generate valid Aadhaar numbers with mathematically correct Verhoeff checksum
 - Generate Voter ID numbers
@@ -69,7 +73,7 @@ pip install -e .
 from indpy import (
     is_pan, is_gstin, is_vehicle, is_aadhaar, is_voterid, 
    is_passport, is_mobile, is_ifsc, is_upi, is_cin, is_pincode,
-   is_credit_card, is_tan, is_dl
+   is_credit_card, is_tan, is_dl, is_uan, is_abha
 )
 
 # Validate PAN (Permanent Account Number)
@@ -80,6 +84,12 @@ print(is_tan("DELM12345L"))  # True
 
 # Validate Driving License
 print(is_dl("MH1220140001234"))  # True
+
+# Validate UAN
+print(is_uan("100012345678"))  # True
+
+# Validate ABHA ID
+print(is_abha("91-1234-5678-9012"))  # True
 
 # Validate GSTIN (includes official Mod-36 checksum)
 print(is_gstin("29ABCDE1234F1Z5"))  # True/False based on checksum
@@ -133,6 +143,12 @@ print(Generate.tan())      # e.g. "DELM12345L"
 # Generate random Driving License
 print(Generate.dl())       # e.g. "MH1220140001234"
 
+# Generate random UAN
+print(Generate.uan())      # e.g. "100123456789"
+
+# Generate random ABHA ID
+print(Generate.abha())     # e.g. "91-1234-5678-9012"
+
 # Generate random mobile number
 print(Generate.mobile())   # e.g. "9876123450"
 
@@ -164,7 +180,7 @@ Check version:
 
 ```bash
 indpy --version
-# Output: 0.1.7
+# Output: 0.1.8
 ```
 
 Validate a document:
@@ -181,6 +197,14 @@ indpy check tan DELM12345L
 # Validate Driving License
 indpy check dl MH1220140001234
 # Output: ✅ DL Validation Result: True
+
+# Validate UAN
+indpy check uan 100012345678
+# Output: ✅ UAN Validation Result: True
+
+# Validate ABHA ID
+indpy check abha 91-1234-5678-9012
+# Output: ✅ ABHA Validation Result: True
 
 # Validate Aadhaar
 indpy check aadhaar 379980670385
@@ -222,6 +246,14 @@ indpy gen tan
 indpy gen dl
 # Output: MH1220140001234
 
+# Generate UAN
+indpy gen uan
+# Output: 100123456789
+
+# Generate ABHA ID
+indpy gen abha
+# Output: 91-1234-5678-9012
+
 # Generate Aadhaar
 indpy gen aadhaar
 # Output: 379980670385
@@ -258,6 +290,8 @@ indpy gen credit_card
 | PAN | `^[A-Z]{5}[0-9]{4}[A-Z]$` | Structure only | 10-character format |
 | TAN | `^[A-Z]{4}[0-9]{5}[A-Z]$` | Structure only | TDS/TCS account number |
 | Driving License | `^[A-Z]{2}[0-9]{2}[0-9]{4}[0-9]{7}$` | N/A | Sarathi-style 15-character format |
+| UAN | `^[1-9]\d{11}$` | N/A | EPFO 12-digit employment ID |
+| ABHA ID | `^[1-9]\d{13}$` | N/A | Ayushman Bharat 14-digit health ID |
 | GSTIN | `^[0-9]{2}[A-Z]{5}[0-9A-Z]{9}[0-9]$` | **Mod-36** | 15-character GST ID |
 | Aadhaar | `^[2-9]\d{11}$` | **Verhoeff** | 12-digit unique ID |
 | Voter ID | `^[A-Z]{3}[0-9]{7}$` | N/A | EPIC format |
@@ -285,7 +319,7 @@ python3 -m pytest tests/ --cov=indpy
 ```
 
 Test files include:
-- **test_lib.py**: Comprehensive tests for all 14 validators and 11 generators
+- **test_lib.py**: Comprehensive tests for all 16 validators and 13 generators
 - Coverage includes structural validation, checksum algorithms, and edge cases
 
 ## 🤝 Contributing
@@ -322,6 +356,8 @@ All validators return a **boolean** (True/False). All generators return a **stri
 is_pan(pan: str) -> bool
 is_tan(tan: str) -> bool
 is_dl(dl: str) -> bool
+is_uan(uan: str) -> bool
+is_abha(abha: str) -> bool
 is_gstin(gstin: str) -> bool
 is_aadhaar(aadhaar: str) -> bool
 is_voterid(voterid: str) -> bool
@@ -340,6 +376,8 @@ is_credit_card(card_number: str) -> bool
 Generate.pan() -> str
 Generate.tan() -> str
 Generate.dl() -> str
+Generate.uan() -> str
+Generate.abha(formatted: bool = True) -> str
 Generate.gstin() -> str  # Note: Does not generate checksum
 Generate.aadhaar() -> str  # With valid Verhoeff checksum
 Generate.voterid() -> str
@@ -357,7 +395,19 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## 📊 Project Status
 
-**Version:** 0.1.7
+**Version:** 0.1.8
+
+## 🆕 What's New in 0.1.8
+
+- Added UAN validator: `is_uan(...)`
+- Added ABHA validator: `is_abha(...)`
+- Added generators: `Generate.uan()` and `Generate.abha(formatted=True)`
+- Added CLI support:
+   - `indpy check uan <number>`
+   - `indpy check abha <id>`
+   - `indpy gen uan`
+   - `indpy gen abha`
+- Updated tests and documentation for both features
 
 ## 🆕 What's New in 0.1.7
 
@@ -381,8 +431,8 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for details.
 - Updated tests and documentation for new validator and generator
 
 **Features:**
-- ✅ 14 document validators (all functional)
-- ✅ 11 mock data generators (production-ready)
+- ✅ 16 document validators (all functional)
+- ✅ 13 mock data generators (production-ready)
 - ✅ Official checksum algorithms (Verhoeff, Mod-36, Luhn)
 - ✅ Comprehensive documentation with regex patterns
 - ✅ CLI support for validation and generation
@@ -393,8 +443,3 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for details.
 - [ ] Add Enrollment ID (UID) validator
 - [ ] Add GST Certificate validator
 - [ ] Add international passport format support
-```bash
-git add README.md
-git commit -m "Update README formatting"
-git push origin main
-```
