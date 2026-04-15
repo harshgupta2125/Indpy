@@ -10,6 +10,8 @@ PATTERNS = {
     "dl": re.compile(r"^[A-Z]{2}[0-9]{2}[0-9]{4}[0-9]{7}$"),
     "uan": re.compile(r"^[1-9]\d{11}$"),
     "abha": re.compile(r"^[1-9]\d{13}$"),
+    "fssai": re.compile(r"^[12]\d{13}$"),
+    "pran": re.compile(r"^[1-9]\d{11}$"),
     "mobile": re.compile(r"^[6-9]\d{9}$"),
     "ifsc": re.compile(r"^[A-Z]{4}0[A-Z0-9]{6}$"),
     "credit_card": re.compile(r"^\d{13,19}$"),
@@ -95,6 +97,34 @@ def is_abha(abha_id: str) -> bool:
         return False
     clean_abha = str(abha_id).replace(" ", "").replace("-", "")
     return bool(PATTERNS["abha"].match(clean_abha))
+
+
+def is_fssai(fssai_number: str) -> bool:
+    """
+    Validates FSSAI (Food Safety and Standards Authority of India) License Number.
+
+    Regex: ^[12]\\d{13}$
+    Format: Exactly 14 digits. Must start with 1 (Registration) or 2 (License).
+    Example: 10012011000001
+    """
+    if not fssai_number:
+        return False
+    clean_fssai = str(fssai_number).replace(" ", "").replace("-", "")
+    return bool(PATTERNS["fssai"].match(clean_fssai))
+
+
+def is_pran(pran_number: str) -> bool:
+    """
+    Validates Permanent Retirement Account Number (PRAN) for NPS.
+
+    Regex: ^[1-9]\\d{11}$
+    Format: Exactly 12 digits, cannot start with 0.
+    Example: 110012345678
+    """
+    if not pran_number:
+        return False
+    clean_pran = str(pran_number).replace(" ", "").replace("-", "")
+    return bool(PATTERNS["pran"].match(clean_pran))
 
 
 def is_mobile(number: str) -> bool:

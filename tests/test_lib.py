@@ -5,6 +5,8 @@ from indpy import (
     is_dl,
     is_uan,
     is_abha,
+    is_fssai,
+    is_pran,
     is_gstin,
     is_vehicle,
     is_aadhaar,
@@ -110,6 +112,42 @@ class TestABHA:
         assert is_abha(generated_raw) is True
         assert "-" in generated_formatted
         assert len(generated_raw) == 14
+
+
+class TestFSSAI:
+    def test_valid_fssai(self):
+        assert is_fssai("10012011000001") is True
+        assert is_fssai("20012011000001") is True
+
+    def test_invalid_fssai(self):
+        assert is_fssai("30012011000001") is False
+        assert is_fssai("1001201100000") is False
+        assert is_fssai("100120110000011") is False
+        assert is_fssai("") is False
+
+    def test_fssai_generator(self):
+        generated = Generate.fssai()
+        assert is_fssai(generated) is True
+        assert len(generated) == 14
+        assert generated[0] in "12"
+
+
+class TestPRAN:
+    def test_valid_pran(self):
+        assert is_pran("110012345678") is True
+        assert is_pran("123456789012") is True
+
+    def test_invalid_pran(self):
+        assert is_pran("023456789012") is False
+        assert is_pran("12345678901") is False
+        assert is_pran("1234567890123") is False
+        assert is_pran("") is False
+
+    def test_pran_generator(self):
+        generated = Generate.pran()
+        assert is_pran(generated) is True
+        assert len(generated) == 12
+        assert generated.startswith("11")
 
 
 class TestGSTIN:
@@ -293,6 +331,8 @@ class TestGeneratorConsistency:
             (is_dl, Generate.dl),
             (is_uan, Generate.uan),
             (is_abha, Generate.abha),
+            (is_fssai, Generate.fssai),
+            (is_pran, Generate.pran),
             (is_aadhaar, Generate.aadhaar),
             (is_voterid, Generate.voterid),
             (is_passport, Generate.passport),

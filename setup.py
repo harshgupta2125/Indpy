@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="indpy_core",
-    version="0.1.8",
+    version="0.1.9",
     author="Harsh Gupta",
     author_email="harsh2125gupta@gmail.com",
     description="A comprehensive library for Indian Identity and Financial data validation.",

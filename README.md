@@ -3,7 +3,7 @@
 ![Python Version](https://img.shields.io/badge/python-3.6%2B-blue?style=for-the-badge&logo=python)
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/status-production-success?style=for-the-badge)
-![PyPI](https://img.shields.io/badge/PyPI-0.1.8-blue?style=for-the-badge)
+![PyPI](https://img.shields.io/badge/PyPI-0.1.9-blue?style=for-the-badge)
 
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/indpy-core?period=total&units=NONE&left_color=BLACK&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/indpy-core)
 
@@ -11,12 +11,14 @@ indpy is a comprehensive Python library for validating and generating Indian gov
 
 ## 🚀 Features
 
-### ✅ Validation (16 Document Types)
+### ✅ Validation (18 Document Types)
 - **PAN**: Permanent Account Number (5 letters + 4 digits + 1 letter)
 - **TAN**: Tax Deduction and Collection Account Number (4 letters + 5 digits + 1 letter)
 - **Driving License (DL)**: State + RTO + Year + serial number (15 characters)
 - **UAN**: EPFO Universal Account Number (12 digits, no leading zero)
 - **ABHA ID**: Ayushman Bharat Health Account Number (14 digits)
+- **FSSAI License**: Food business registration/license number (14 digits)
+- **PRAN**: Permanent Retirement Account Number for NPS (12 digits)
 - **GSTIN**: GST Identification Number (with Mod-36 checksum verification)
 - **Aadhaar**: 12-digit unique identity (with Verhoeff checksum algorithm)
 - **Voter ID (EPIC)**: Electoral ID (3 letters + 7 digits)
@@ -29,12 +31,14 @@ indpy is a comprehensive Python library for validating and generating Indian gov
 - **Pincode**: Indian postal code (6 digits, no leading zero)
 - **Credit Card**: 13–19 digit card numbers (with Luhn Mod-10 checksum)
 
-### 🎲 Data Generation (13 Mock Data Generators)
+### 🎲 Data Generation (15 Mock Data Generators)
 - Generate valid PAN numbers with realistic format
 - Generate valid TAN numbers
 - Generate valid Driving License numbers
 - Generate valid UAN numbers
 - Generate valid ABHA IDs (formatted and raw)
+- Generate valid FSSAI license numbers
+- Generate valid PRAN numbers
 - Generate valid mobile numbers (6–9 prefix)
 - Generate valid Aadhaar numbers with mathematically correct Verhoeff checksum
 - Generate Voter ID numbers
@@ -73,7 +77,7 @@ pip install -e .
 from indpy import (
     is_pan, is_gstin, is_vehicle, is_aadhaar, is_voterid, 
    is_passport, is_mobile, is_ifsc, is_upi, is_cin, is_pincode,
-   is_credit_card, is_tan, is_dl, is_uan, is_abha
+   is_credit_card, is_tan, is_dl, is_uan, is_abha, is_fssai, is_pran
 )
 
 # Validate PAN (Permanent Account Number)
@@ -90,6 +94,12 @@ print(is_uan("100012345678"))  # True
 
 # Validate ABHA ID
 print(is_abha("91-1234-5678-9012"))  # True
+
+# Validate FSSAI License
+print(is_fssai("10012011000001"))  # True
+
+# Validate PRAN
+print(is_pran("110012345678"))  # True
 
 # Validate GSTIN (includes official Mod-36 checksum)
 print(is_gstin("29ABCDE1234F1Z5"))  # True/False based on checksum
@@ -149,6 +159,12 @@ print(Generate.uan())      # e.g. "100123456789"
 # Generate random ABHA ID
 print(Generate.abha())     # e.g. "91-1234-5678-9012"
 
+# Generate random FSSAI License
+print(Generate.fssai())    # e.g. "10012011000001"
+
+# Generate random PRAN
+print(Generate.pran())     # e.g. "110012345678"
+
 # Generate random mobile number
 print(Generate.mobile())   # e.g. "9876123450"
 
@@ -180,7 +196,7 @@ Check version:
 
 ```bash
 indpy --version
-# Output: 0.1.8
+# Output: 0.1.9
 ```
 
 Validate a document:
@@ -205,6 +221,14 @@ indpy check uan 100012345678
 # Validate ABHA ID
 indpy check abha 91-1234-5678-9012
 # Output: ✅ ABHA Validation Result: True
+
+# Validate FSSAI License
+indpy check fssai 10012011000001
+# Output: ✅ FSSAI Validation Result: True
+
+# Validate PRAN
+indpy check pran 110012345678
+# Output: ✅ PRAN Validation Result: True
 
 # Validate Aadhaar
 indpy check aadhaar 379980670385
@@ -254,6 +278,14 @@ indpy gen uan
 indpy gen abha
 # Output: 91-1234-5678-9012
 
+# Generate FSSAI License
+indpy gen fssai
+# Output: 10012011000001
+
+# Generate PRAN
+indpy gen pran
+# Output: 110012345678
+
 # Generate Aadhaar
 indpy gen aadhaar
 # Output: 379980670385
@@ -292,6 +324,8 @@ indpy gen credit_card
 | Driving License | `^[A-Z]{2}[0-9]{2}[0-9]{4}[0-9]{7}$` | N/A | Sarathi-style 15-character format |
 | UAN | `^[1-9]\d{11}$` | N/A | EPFO 12-digit employment ID |
 | ABHA ID | `^[1-9]\d{13}$` | N/A | Ayushman Bharat 14-digit health ID |
+| FSSAI License | `^[12]\d{13}$` | N/A | Food business registration/license ID |
+| PRAN | `^[1-9]\d{11}$` | N/A | NPS retirement account number |
 | GSTIN | `^[0-9]{2}[A-Z]{5}[0-9A-Z]{9}[0-9]$` | **Mod-36** | 15-character GST ID |
 | Aadhaar | `^[2-9]\d{11}$` | **Verhoeff** | 12-digit unique ID |
 | Voter ID | `^[A-Z]{3}[0-9]{7}$` | N/A | EPIC format |
@@ -319,7 +353,7 @@ python3 -m pytest tests/ --cov=indpy
 ```
 
 Test files include:
-- **test_lib.py**: Comprehensive tests for all 16 validators and 13 generators
+- **test_lib.py**: Comprehensive tests for all 18 validators and 15 generators
 - Coverage includes structural validation, checksum algorithms, and edge cases
 
 ## 🤝 Contributing
@@ -358,6 +392,8 @@ is_tan(tan: str) -> bool
 is_dl(dl: str) -> bool
 is_uan(uan: str) -> bool
 is_abha(abha: str) -> bool
+is_fssai(fssai: str) -> bool
+is_pran(pran: str) -> bool
 is_gstin(gstin: str) -> bool
 is_aadhaar(aadhaar: str) -> bool
 is_voterid(voterid: str) -> bool
@@ -378,6 +414,8 @@ Generate.tan() -> str
 Generate.dl() -> str
 Generate.uan() -> str
 Generate.abha(formatted: bool = True) -> str
+Generate.fssai() -> str
+Generate.pran() -> str
 Generate.gstin() -> str  # Note: Does not generate checksum
 Generate.aadhaar() -> str  # With valid Verhoeff checksum
 Generate.voterid() -> str
@@ -395,7 +433,19 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## 📊 Project Status
 
-**Version:** 0.1.8
+**Version:** 0.1.9
+
+## 🆕 What's New in 0.1.9
+
+- Added FSSAI validator: `is_fssai(...)`
+- Added PRAN validator: `is_pran(...)`
+- Added generators: `Generate.fssai()` and `Generate.pran()`
+- Added CLI support:
+   - `indpy check fssai <number>`
+   - `indpy check pran <number>`
+   - `indpy gen fssai`
+   - `indpy gen pran`
+- Updated tests and documentation for both features
 
 ## 🆕 What's New in 0.1.8
 
@@ -431,8 +481,8 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for details.
 - Updated tests and documentation for new validator and generator
 
 **Features:**
-- ✅ 16 document validators (all functional)
-- ✅ 13 mock data generators (production-ready)
+- ✅ 18 document validators (all functional)
+- ✅ 15 mock data generators (production-ready)
 - ✅ Official checksum algorithms (Verhoeff, Mod-36, Luhn)
 - ✅ Comprehensive documentation with regex patterns
 - ✅ CLI support for validation and generation

@@ -54,6 +54,19 @@ class Generate:
         return part1 + part2 + part3 + part4
 
     @staticmethod
+    def fssai() -> str:
+        """Generates a random FSSAI License Number (14 digits)."""
+        first_digit = random.choice(["1", "2"])
+        state = f"{random.randint(1, 36):02d}"
+        rest = "".join(random.choices(string.digits, k=11))
+        return first_digit + state + rest
+
+    @staticmethod
+    def pran() -> str:
+        """Generates a random PRAN for National Pension System (12 digits)."""
+        return "11" + "".join(random.choices(string.digits, k=10))
+
+    @staticmethod
     def mobile() -> str:
         """Generate valid Indian mobile number."""
         start = random.choice("6789")
